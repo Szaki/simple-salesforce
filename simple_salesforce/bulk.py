@@ -1,7 +1,6 @@
 """ Classes for interacting with Salesforce Bulk API """
 
 import json
-from collections import OrderedDict
 from time import sleep
 import concurrent.futures
 from functools import partial
@@ -103,7 +102,7 @@ class SFBulkType:
         result = call_salesforce(url=url, method='POST', session=self.session,
                                  headers=self.headers,
                                  data=json.dumps(payload))
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _close_job(self, job_id):
         """ Close a bulk job """
@@ -116,7 +115,7 @@ class SFBulkType:
         result = call_salesforce(url=url, method='POST', session=self.session,
                                  headers=self.headers,
                                  data=json.dumps(payload))
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _get_job(self, job_id):
         """ Get an existing job to check the status """
@@ -124,7 +123,7 @@ class SFBulkType:
 
         result = call_salesforce(url=url, method='GET', session=self.session,
                                  headers=self.headers)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _add_batch(self, job_id, data, operation):
         """ Add a set of data as a batch to an existing job
@@ -139,7 +138,7 @@ class SFBulkType:
 
         result = call_salesforce(url=url, method='POST', session=self.session,
                                  headers=self.headers, data=data)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _get_batch(self, job_id, batch_id):
         """ Get an existing batch to check the status """
@@ -149,7 +148,7 @@ class SFBulkType:
 
         result = call_salesforce(url=url, method='GET', session=self.session,
                                  headers=self.headers)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _get_batch_results(self, job_id, batch_id, operation):
         """ retrieve a set of results from a completed job """

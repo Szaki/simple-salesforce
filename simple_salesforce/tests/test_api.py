@@ -3,7 +3,6 @@
 import http.client as http
 import re
 import unittest
-from collections import OrderedDict
 from datetime import datetime
 from unittest.mock import patch
 
@@ -681,8 +680,8 @@ class TestSalesforce(unittest.TestCase):
                             session=session)
 
         result = client.query_all_iter('SELECT ID FROM Account')
-        self.assertEqual(next(result), OrderedDict([(u'ID', u'1')]))
-        self.assertEqual(next(result), OrderedDict([(u'ID', u'2')]))
+        self.assertEqual(next(result), dict([(u'ID', u'1')]))
+        self.assertEqual(next(result), dict([(u'ID', u'2')]))
         with self.assertRaises(StopIteration):
             next(result)
 
@@ -710,9 +709,9 @@ class TestSalesforce(unittest.TestCase):
         result = client.query_all('SELECT ID FROM Account')
         self.assertEqual(
             result,
-            OrderedDict([('records', [
-                OrderedDict([('ID', '1')]),
-                OrderedDict([('ID', '2')])
+            dict([('records', [
+                dict([('ID', '1')]),
+                dict([('ID', '2')])
             ]), ('done', True), ('totalSize', 2)]))
 
     @responses.activate
@@ -741,9 +740,9 @@ class TestSalesforce(unittest.TestCase):
                                   include_deleted=True)
         self.assertEqual(
             result,
-            OrderedDict([('records', [
-                OrderedDict([('ID', '1')]),
-                OrderedDict([('ID', '2')])
+            dict([('records', [
+                dict([('ID', '1')]),
+                dict([('ID', '2')])
             ]), ('done', True), ('totalSize', 2)]))
 
     @responses.activate

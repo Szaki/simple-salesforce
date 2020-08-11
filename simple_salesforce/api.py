@@ -8,7 +8,7 @@ DEFAULT_API_VERSION = '42.0'
 import json
 import logging
 import re
-from collections import OrderedDict, namedtuple
+from collections import namedtuple
 from urllib.parse import urljoin, urlparse
 
 import requests
@@ -204,7 +204,7 @@ class Salesforce:
         url = self.base_url + "sobjects"
         result = self._call_salesforce('GET', url, name='describe', **kwargs)
 
-        json_result = result.json(object_pairs_hook=OrderedDict)
+        json_result = result.json()
         if len(json_result) == 0:
             return None
 
@@ -263,7 +263,7 @@ class Salesforce:
                                          result.status_code,
                                          'User',
                                          result.content)
-        json_result = result.json(object_pairs_hook=OrderedDict)
+        json_result = result.json()
         if len(json_result) == 0:
             return None
 
@@ -286,7 +286,7 @@ class Salesforce:
         result = self._call_salesforce(method, url, name=path, params=params,
                                        **kwargs)
 
-        json_result = result.json(object_pairs_hook=OrderedDict)
+        json_result = result.json()
         if len(json_result) == 0:
             return None
 
@@ -308,7 +308,7 @@ class Salesforce:
         params = {'q': search}
         result = self._call_salesforce('GET', url, name='search', params=params)
 
-        json_result = result.json(object_pairs_hook=OrderedDict)
+        json_result = result.json()
         if len(json_result) == 0:
             return None
 
@@ -337,7 +337,7 @@ class Salesforce:
         if result.status_code != 200:
             exception_handler(result)
 
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     # Query Handler
     def query(self, query, include_deleted=False, **kwargs):
@@ -356,7 +356,7 @@ class Salesforce:
         result = self._call_salesforce('GET', url, name='query',
                                        params=params, **kwargs)
 
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def query_more(
             self, next_records_identifier, identifier_is_url=False,
@@ -390,7 +390,7 @@ class Salesforce:
                              next_record_id=next_records_identifier)
         result = self._call_salesforce('GET', url, name='query_more', **kwargs)
 
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def query_all_iter(self, query, include_deleted=False, **kwargs):
         """This is a lazy alternative to `query_all` - it does not construct
@@ -579,7 +579,7 @@ class SFType:
         * headers -- a dict with additional request headers.
         """
         result = self._call_salesforce('GET', self.base_url, headers=headers)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def describe(self, headers=None):
         """Returns the result of a GET to `.../{object_name}/describe` as a
@@ -593,7 +593,7 @@ class SFType:
             method='GET', url=urljoin(self.base_url, 'describe'),
             headers=headers
         )
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def describe_layout(self, record_id, headers=None):
         """Returns the layout of the object
@@ -615,7 +615,7 @@ class SFType:
             url=urljoin(self.base_url, custom_url_part),
             headers=headers
         )
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def get(self, record_id, headers=None):
         """Returns the result of a GET to `.../{object_name}/{record_id}` as a
@@ -630,7 +630,7 @@ class SFType:
             method='GET', url=urljoin(self.base_url, record_id),
             headers=headers
         )
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def get_by_custom_id(self, custom_id_field, custom_id, headers=None):
         """Return an ``SFType`` by custom ID
@@ -654,7 +654,7 @@ class SFType:
         result = self._call_salesforce(
             method='GET', url=custom_url, headers=headers
         )
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def create(self, data, headers=None):
         """Creates a new SObject using a POST to `.../{object_name}/`.
@@ -671,7 +671,7 @@ class SFType:
             method='POST', url=self.base_url,
             data=json.dumps(data), headers=headers
         )
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def upsert(self, record_id, data, raw_response=False, headers=None):
         """Creates or updates an SObject using a PATCH to
@@ -759,7 +759,7 @@ class SFType:
             )
         )
         result = self._call_salesforce(method='GET', url=url, headers=headers)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def updated(self, start, end, headers=None):
         # pylint: disable=line-too-long
@@ -780,7 +780,7 @@ class SFType:
             )
         )
         result = self._call_salesforce(method='GET', url=url, headers=headers)
-        return result.json(object_pairs_hook=OrderedDict)
+        return result.json()
 
     def _call_salesforce(self, method, url, **kwargs):
         """Utility method for performing HTTP call to Salesforce.
